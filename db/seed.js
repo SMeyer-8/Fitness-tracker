@@ -1,11 +1,10 @@
 const client = require("./client");
 const { createUser } = require("./adapters/users");
-
 const {
   users,
   activities,
   routines,
-  routine_activities,
+  routines_activities,
 } = require("./seedData");
 
 async function dropTables() {
@@ -35,8 +34,10 @@ async function createTables() {
 async function populateTables() {
   console.log("Populating tables...");
   try {
-    const user = await createUser({ username: 'Pawan', password: 12345678 });
-    console.log("User:", user);
+    for (const user of users) {
+      const createdUser = await createUser(user);
+      console.log("User: ", createdUser);
+    }
   } catch (error) {
     console.error(error);
   }

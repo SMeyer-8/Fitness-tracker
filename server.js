@@ -5,6 +5,9 @@ const PORT = 3000;
 
 const app = express();
 
+const client = require("./db/client");
+client.connect();
+
 // Middleware
 app.use(morgan("dev"));
 app.use(express.json());

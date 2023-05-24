@@ -16,4 +16,13 @@ async function createUser({ username, password }) {
      return user;
 }
 
-module.exports = { createUser };
+//This code may be optional to get all users from the data base
+async function getAllUsers() {
+  const {rows}  = await client.query(`
+  SELECT * FROM users;
+  `);
+  return rows;
+  }
+
+
+module.exports = { createUser, getAllUsers };

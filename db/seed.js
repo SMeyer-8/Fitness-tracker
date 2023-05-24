@@ -1,4 +1,6 @@
 const client = require("./client");
+const { createUser } = require("./adapters/users");
+
 const {
   users,
   activities,
@@ -7,15 +9,37 @@ const {
 } = require("./seedData");
 
 async function dropTables() {
-  // Drop all tables in order
+  console.log("Dropping tables...");
+  try {
+    await client.query(`DROP TABLE IF EXISTS users;`);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function createTables() {
-  // Define your tables and fields
+  console.log("Creating tables...");
+  try {
+    await client.query(`
+      CREATE TABLE users (
+        id SERIAL PRIMARY KEY,
+        username TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+      )
+    `);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function populateTables() {
-  // Seed tables with dummy data from seedData.js
+  console.log("Populating tables...");
+  try {
+    const user = await createUser({ username: 'Pawan', password: 12345678 });
+    console.log("User:", user);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function rebuildDb() {

@@ -1,11 +1,6 @@
 const client = require("./client");
 const { createUser } = require("./adapters/users");
-const {
-  users,
-  activities,
-  routines,
-  routines_activities,
-} = require("./seedData");
+const { users } = require("./seedData");
 
 async function dropTables() {
   console.log("Dropping tables...");

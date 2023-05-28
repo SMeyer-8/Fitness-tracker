@@ -111,7 +111,7 @@ async function destoryRoutine(routineId) {
     } = await client.query(
         `
         delete from routineactivities where routine_id = $1;
-        elete from routines where id = $1;
+        delete from routines where id = $1;
       `,
         [routineId]
     );

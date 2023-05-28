@@ -26,4 +26,43 @@ async function getRoutineActivityById(routineActivityId) {
     return routineActivity;
 }
 
-module.exports = { getRoutineActivityById, addActivityToRoutine }
+async function updateRoutineActivity({ routineActivityId, count, duration }) {
+    const {
+        rows: [routineActivity],
+    } = await client.query(
+        `
+          update routineactivities
+          set count = $2, duration = $3 
+          where id = $1;
+      `,
+        [routineActivityId, count, duration]
+    );
+    return routineActivity;
+}
+
+async function destroyRoutineActivity(routineActivityId) {
+    const {
+        rows: [routineActivity],
+    } = await client.query(
+        `
+          delete from routineactivities
+          where id = $1;
+      `,
+        [routineActivityId]
+    );
+    return routineActivity;
+}
+
+async function getRoutineActivitiesByRoutine(routineId) {
+    const {
+        rows: [routineActivity],
+    } = await client.query(
+        `
+          select * from routineactivities where routine_id = $1;
+      `,
+        [routineId]
+    );
+    return routineActivity;
+}
+
+module.exports = { getRoutineActivitiesByRoutine, destroyRoutineActivity, updateRoutineActivity, getRoutineActivityById, addActivityToRoutine }

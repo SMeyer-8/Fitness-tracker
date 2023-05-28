@@ -24,5 +24,30 @@ async function getAllUsers() {
   return rows;
   }
 
+async function getUserById(id) {
+  const {
+    rows: [user],
+  } = await client.query(
+    `
 
-module.exports = { createUser, getAllUsers };
+    select username from users where id = $1;
+  `,
+    [id]
+  );
+   return user;
+}
+
+async function getUserByUsername(username) {
+  const {
+    rows: [user],
+  } = await client.query(
+    `
+
+    select * from users where username = $1;
+  `,
+    [username]
+  );
+   return user;
+}
+
+module.exports = { createUser, getAllUsers, getUserById, getUserByUsername};

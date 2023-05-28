@@ -5,7 +5,11 @@ const { users } = require("./seedData");
 async function dropTables() {
   console.log("Dropping tables...");
   try {
+    await client.query(`DROP TABLE IF EXISTS routineactivities;`);
+    await client.query(`DROP TABLE IF EXISTS activities;`);
+    await client.query(`DROP TABLE IF EXISTS routines;`);
     await client.query(`DROP TABLE IF EXISTS users;`);
+    
   } catch (error) {
     console.error(error);
   }
@@ -21,6 +25,35 @@ async function createTables() {
         password TEXT NOT NULL
       )
     `);
+
+    await client.query(`
+      create table routines (
+        id serial primary key,
+        creator_id integer references users(id),
+        is_public boolean default false,
+        name varchar(255) unique not null,
+        goal text not null
+      )
+    `);
+
+    await client.query(`
+      create table activities (
+        id serial primary key,
+        name varchar(255) unique not null,
+        description text not null
+      )
+    `);
+
+    await client.query(`
+      create table routineactivities (
+        id serial primary key,
+        routine_id integer references routines(id),
+        activity_id integer references activities(id),
+        duration integer,
+        count integer
+      )
+    `);
+
   } catch (error) {
     console.log(error);
   }

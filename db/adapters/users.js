@@ -18,11 +18,11 @@ async function createUser({ username, password }) {
 
 //This code may be optional to get all users from the data base
 async function getAllUsers() {
-  const {rows}  = await client.query(`
-  SELECT * FROM users;
+  const [rows]  = await client.query(`
+    SELECT * FROM users;
   `);
   return rows;
-  }
+}
 
 async function getUserById(id) {
   const {

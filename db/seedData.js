@@ -10,11 +10,16 @@ const activities = [
   { name: 'test3', description: 'test3' },
 ];
 const routines = [
-  { creator_id: 1, is_public: true, name: 'test', goal: 'do stuff'},
-  { creator_id: 1, is_public: false, name: 'test1', goal: 'do stuff'},
-  { creator_id: 2, is_public: true, name: 'test2', goal: 'do stuff'},
-  { creator_id: 2, is_public: false, name: 'test3', goal: 'do stuff'},
+  { creatorId: 1, isPublic: true, name: 'test', goal: 'do stuff'},
+  { creatorId: 1, isPublic: false, name: 'test1', goal: 'do stuff'},
+  { creatorId: 2, isPublic: true, name: 'test2', goal: 'do stuff'},
+  { creatorId: 2, isPublic: false, name: 'test3', goal: 'do stuff'},
 ];
-const routine_activities = [];
+const routineActivities = [
+  { routineId: 1, activityId: 1, duration: 1, count: 1},
+  { routineId: 1, activityId: 2, duration: 1, count: 1},
+  { routineId: 2, activityId: 1, duration: 1, count: 1},
+  { routineId: 2, activityId: 2, duration: 1, count: 1},
+];
 
-module.exports = { users, activities, routines, routine_activities };
+module.exports = { users, activities, routines, routineActivities };

@@ -7,29 +7,49 @@ const {
 } = require("../db/adapters/users");
 
 //POST request to /api/users/register
+// usersRouter.post("/login", async (req, res, next) => {
+//   //login code goes here
+// })
+
 usersRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
   try {
-    const _users = await getUserByUsername(username);
+    const _user = await getUserByUsername(username);
     if (_user) {
       next({
         name: "ALREADY A USER",
-        message: "Registration successful",
+        message: "Registration unsuccessful",
       });
+      return
     }
-
-    // POST / users/login
-    const user = await createUser(username, password);
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "2w",
-    });
+    const user = await createUser({username, password})
+    delete user.password
     res.send({
-      message: "The username already exists",
-    });
+      message: "You are registered!!",
+      user
+    })
   } catch (error) {
-    next(error);
+    next(error)
   }
-});
+})
+
+// usersRouter.get("/me", async (req, res, next) => {
+
+//     })
+
+
+// POST / users/login
+// const user = await createUser(username, password);
+// const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+//   expiresIn: "2w",
+// });
+// res.send({
+//   message: "The username already exists",
+// });
+//   } catch (error) {
+//   next(error);
+// }
+// });
 
 usersRouter.get("/", async (req, res, next) => {
   try {

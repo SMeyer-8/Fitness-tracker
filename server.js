@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const path = require("path");
 const server = express();
 
@@ -16,6 +17,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 server.use(express.static(path.join(__dirname, "./client")));
+server.use(cors());
+
 // Routes
 app.use("/api", require("./routes"));
 

@@ -1,63 +1,74 @@
-const usersRouter = require("express").Router();
-const jwt = require("jsonwebtoken");
-const {
-  getAllUsers,
-  getUserByUsername,
-  createUser,
-} = require("../db/adapters/users");
+const userRouter = require('express').Router();
+const bcrypt = require("bcrypt");
+const SALT_ROUNDS = 10;
+const { createUser, getUserByUsername } = require("../db/adapters/users");
 
-//POST request to /api/users/register
-// usersRouter.post("/login", async (req, res, next) => {
-//   //login code goes here
-// })
-
-usersRouter.post("/register", async (req, res, next) => {
-  const { username, password } = req.body;
+//signup
+userRouter.post("/register", async (req, res, next) => {
   try {
-    const _user = await getUserByUsername(username);
-    if (_user) {
-      next({
-        name: "ALREADY A USER",
-        message: "Registration unsuccessful",
-      });
-      return
-    }
-    const user = await createUser({username, password})
-    delete user.password
-    res.send({
-      message: "You are registered!!",
-      user
-    })
-  } catch (error) {
-    next(error)
-  }
-})
+    const { username, password } = req.body;
+    const hashedPassword = bcrypt.hash(password, SALT_ROUNDS);
+    const user = await createUser({ username, password: hashedPassword });
+    delete user.password;
 
-// usersRouter.get("/me", async (req, res, next) => {
+    const token = jwt.sign(user, process.env.JWT_SECRET);
+    console.log("token:", token);
 
-//     })
+    res.cookie("token", token, {
+      sameSite: "strict",
+      httpOnly: true,
+      signed: true,
+    });
 
-
-// POST / users/login
-// const user = await createUser(username, password);
-// const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-//   expiresIn: "2w",
-// });
-// res.send({
-//   message: "The username already exists",
-// });
-//   } catch (error) {
-//   next(error);
-// }
-// });
-
-usersRouter.get("/", async (req, res, next) => {
-  try {
-    const users = await getAllUsers();
-    res.send(users);
+    res.send({ user, token });
   } catch (error) {
     next(error);
   }
 });
 
-module.exports = usersRouter;
+userRouter.post("/login", async (req, res, next) => {
+  const { username, password } = req.body;
+  try {
+    const user = await getUserByUsername(username);
+    const checkedPassword = await bcrypt.compare(password, user.password);
+    if (checkedPassword) {
+      const token = jwt.sign(user, process.env.JWT_SECRET);
+
+      res.cookie("token", token, {
+        sameSite: "strict",
+        httpOnly: true,
+        signed: true,
+      });
+      res.send({ message: "You're logged in!" });
+    }
+  } catch (error) {
+    next({
+      name: "Login FAiled",
+      message: "Invalid username or password",
+    });
+  }
+});
+
+userRouter.get("/logout", async (req, res, next) => {
+  try {
+    res.clearCookie("token", {
+      sameSite: "strict",
+      httpOnly: true,
+      signed: true,
+    });
+    res.send({
+      loggedIn: false,
+      message: "You're logged out!",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+userRouter.get("/me", authRequired, (req, res, next) => {
+  res.send(req.user);
+  
+});
+  
+
+module.exports = userRouter;

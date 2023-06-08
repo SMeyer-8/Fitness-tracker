@@ -52,4 +52,6 @@ async function updateActivity({ activityId, name, description }) {
     return activity;
 }
 
+    async function deleteActivityById(id) {}
+
 module.exports = { updateActivity, getAllActivities, getActivityById, createActivity }

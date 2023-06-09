@@ -19,7 +19,12 @@ function App() {
     checkAPIHealth();
   }, []);
 
-  return <> </>;
+  return (
+    <>
+    {error && <p>{JSON.stringify(error, null, 2)}</p>} 
+    {healthMessage && <p>{healthMessage}</p>}
+    </>;
+  );
 }
 
 export default App;

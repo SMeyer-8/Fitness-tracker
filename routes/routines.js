@@ -1,5 +1,5 @@
 const routinesRouter = require("express").Router();
-const { authRequired } = require("./utlis");
+const { authRequired } = require("./utils");
 const {
   getAllPublicRoutines,
   getAllRoutinesByUserId,

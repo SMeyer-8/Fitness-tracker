@@ -1,5 +1,6 @@
 const userRouter = require('express').Router();
 const bcrypt = require("bcrypt");
+const { authRequired } = require("./utils");
 const SALT_ROUNDS = 10;
 const { createUser, getUserByUsername } = require("../db/adapters/users");
 
@@ -67,7 +68,7 @@ userRouter.get("/logout", async (req, res, next) => {
 
 userRouter.get("/me", authRequired, (req, res, next) => {
   res.send(req.user);
-  
+
 });
   
 

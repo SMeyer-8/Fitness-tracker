@@ -1,30 +1,19 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, Link } from "react-router-dom";
+import { AllActiviteies } from "../src/Components/AllActiviteies";
+
 
 import "./App.css";
 
 function App() {
-  const [healthMessage, setHealthMessage] = useState("");
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    async function checkAPIHealth() {
-      try {
-        const response = await fetch("/api/health");
-        const result = await response.json();
-        setHealthMessage(result);
-      } catch (error) {
-        setError(error);
-      }
-    }
-    checkAPIHealth();
-  }, []);
-
-  return (
-    <>
-    {error && <p>{JSON.stringify(error, null, 2)}</p>} 
-    {healthMessage && <p>{healthMessage}</p>}
-    </>;
-  );
+ return (
+   <div className="App">
+     <header className="header">
+       <h1>FITNESS APP</h1>
+       <Link to="/activities">Activities</Link>
+     </header>
+   </div>
+ );
 }
 
 export default App;

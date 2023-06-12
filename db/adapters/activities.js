@@ -28,14 +28,12 @@ async function getActivityById(id) {
 }
 
 async function getAllActivities() {
-    const {
-        rows: [activity],
-    } = await client.query(
+    const {rows} = await client.query(
         `
         select * from activities
       `
     );
-    return activity;
+    return rows;
 }
 
 async function updateActivity({ activityId, name, description }) {

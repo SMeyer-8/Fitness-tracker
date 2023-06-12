@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import { AllActiviteies } from "../src/Components/AllActiviteies";
 
 
 import "./App.css";

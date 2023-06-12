@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { fetchAllActivities } from "../api/activities";
 
-export function AllActiviteies() {
-  const [activities, setActivities] = useState("");
+export function AllActivities() {
+  const [activities, setActivities] = useState([]);
 
   useEffect(() => {
     async function getAllActivities() {
